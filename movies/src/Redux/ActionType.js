@@ -1,0 +1,2 @@
+export const MY_MOVIE_LIST="MY_MOVIE_LIST";
+export const MY_MOVIE_DETAILS="MY_MOVIE_DETAILS";
