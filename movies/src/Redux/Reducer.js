@@ -2,7 +2,8 @@ import * as types from "./ActionType";
 
 const initialState = {
     movieListData: [],
-    movieDetailsData:[]
+    movieDetailsData:[],
+    searchmovieData:[]
   
   };
 
@@ -20,6 +21,12 @@ const initialState = {
               movieDetailsData: action.payload,
               loading: false,
             };
+            case types.MY_MOVIE_SEARCH:
+                return {
+                  ...state,
+                  searchmovieData: action.payload.results,
+                  loading: false,
+                };
     
       default:
         return state;

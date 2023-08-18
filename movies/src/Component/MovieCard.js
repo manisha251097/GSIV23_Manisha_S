@@ -30,7 +30,7 @@ const handleCardClick=()=>{
         <div style={{backgroundColor:"#DFDFDF",borderTopLeftRadius:"10px",borderTopRightRadius:"10px"}}><img style={{ width: "100%", height: "100%", objectFit: "cover",borderTopLeftRadius:"10px",borderTopRightRadius:"10px" }} alt="Movie Poster" src={fullImageUrl} /></div>
         <div style={{padding:"10px"}}>
             <div style={{display:"flex",justifyContent:"space-between"}}>
-                <div style={{fontWeight:"600"}}>{data?.original_title}</div>
+                <div style={{fontWeight:"600"}}>{data?.original_title.substring(0,20)}</div>
                 <div style={{fontWeight:"600"}}>{data?.vote_average}</div>
             </div>
             <div style={{paddingTop:"5px",fontSize:"14px"}}>{data?.overview.substring(0,50)}...</div>

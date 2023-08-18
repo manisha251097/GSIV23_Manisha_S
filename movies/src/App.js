@@ -1,54 +1,85 @@
 import "./App.css";
-import React,{useEffect} from "react";
+import React, { useEffect, useState } from "react";
 import MovieCard from "./Component/MovieCard";
-import {useDispatch,useSelector} from "react-redux";
-import HomeIcon from '@mui/icons-material/Home';
-import { loadMovieList } from "./Redux/Action";
+import { useDispatch, useSelector } from "react-redux";
+import HomeIcon from "@mui/icons-material/Home";
+import { loadMovieList, loadSearchmovies } from "./Redux/Action";
+import MovieList from "./Component/MovieList";
+import SearchMovie from "./Component/SearchMovie";
+import { IconButton, TextField } from "@mui/material";
+import ClearIcon from "@mui/icons-material/Clear";
 
 function App() {
+  const [searchQuery, setSearchQuery] = useState("");
 
-  const dispatch= useDispatch();
-  const { movieListData } =
-    useSelector((state) => state.data);
+  const dispatch = useDispatch();
+  const { movieListData, searchmovieData } = useSelector((state) => state.data);
 
-    useEffect(() => {
-      dispatch(loadMovieList());
-   
-  
-    }, []);
+  useEffect(() => {
+    dispatch(loadMovieList());
+  }, []);
 
-    console.log(movieListData,"movieListData")
-  
+  useEffect(() => {
+    if (searchQuery === "") {
+      dispatch(loadMovieList()); 
+    }
+  }, [searchQuery, dispatch]);
+
+  const handleSearchSubmit = (value) => {
+    setSearchQuery(value)
+    // if (searchQuery) {
+      dispatch(loadSearchmovies(value));
+    // }
+  };
+
+  const handleClear = () => {
+    setSearchQuery(""); 
+    dispatch(loadSearchmovies());
+
+  };
 
   return (
     <div
-      style={{ display: "grid", gridTemplateRows: "7% 93%", height: "100vh" }}
+      style={{ display: "grid", gridTemplateRows: "9% 91%", height: "100vh" }}
     >
       <div
         style={{
           display: "flex",
-        
           boxShadow: "0px 6px 6px rgba(0, 0, 0, 0.1)",
-          padding:"20px",
-          justifyContent:"space-between",
-          alignItems:"center"
+          padding: "20px",
+          justifyContent: "space-between",
+          alignItems: "center",
         }}
       >
-        <div>
-          <input 
-           type="text"
+        <div style={{ display: "flex" }}>
+          <TextField
+            type="text"
+            variant="outlined"
             placeholder="Search"
-            style={{
-              padding: "6px",
-              borderRadius: "4px",
-              border: "1px solid #ccc",
-              width:"300px",
-              backgroundColor:"#DFDFDF"
+            InputProps={{
+              endAdornment: (
+                <IconButton
+                  aria-label="clear search"
+                  onClick={handleClear}
+                  size="small"
+                >
+                  <ClearIcon />
+                </IconButton>
+              ),
+              style: {
+                backgroundColor: "#DFDFDF",
+                height: "32px",
+              },
             }}
+            style={{
+              width: "300px",
+            }}
+            value={searchQuery}
+            onChange={(e) => handleSearchSubmit(e.target.value)}
           />
+        
         </div>
         <div>
-          
           <HomeIcon />
         </div>
       </div>
@@ -59,9 +90,11 @@ function App() {
           gridTemplateColumns: "auto auto auto auto auto auto ",
         }}
       >
-        {movieListData.map((x) => {
-          return <MovieCard data={x}/>;
-        })}
+        {searchmovieData.length > 0 ? (
+          <SearchMovie results={searchmovieData} />
+        ) : (
+          <MovieList movies={movieListData} />
+        )}
       </div>
     </div>
   );
